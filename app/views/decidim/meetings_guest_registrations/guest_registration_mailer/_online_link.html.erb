@@ -1,0 +1,5 @@
+<% if online_meeting_url.present? %>
+  <p class="email-instructions">
+    <%= t("decidim.meetings_guest_registrations.mailer.online_meeting_html", url: online_meeting_url) %>
+  </p>
+<% end %>

@@ -7,6 +7,7 @@ module Decidim
   # Lets people without an account register to meetings that allow it.
   module MeetingsGuestRegistrations
     autoload :EmailDigest, "decidim/meetings_guest_registrations/email_digest"
+    autoload :Recipient, "decidim/meetings_guest_registrations/recipient"
 
     # Runs the block once every open transaction has been committed, or right
     # away when there is none. Jobs and e-mails enqueued from inside a
