@@ -1,0 +1,22 @@
+<% add_decidim_page_title(t("decidim.meetings_guest_registrations.guest_registrations.cancel.title")) %>
+
+<%= render layout: "layouts/decidim/shared/layout_center" do %>
+  <div class="text-center py-10">
+    <h1 class="title-decorator inline-block text-left">
+      <%= t("decidim.meetings_guest_registrations.guest_registrations.cancel.title") %>
+    </h1>
+  </div>
+
+  <div class="form__wrapper">
+    <p><%= t("decidim.meetings_guest_registrations.guest_registrations.cancel.question_html", title: present(meeting).title(html_escape: true)) %></p>
+    <p><%= t("decidim.meetings_guest_registrations.guest_registrations.cancel.release_slot") %></p>
+  </div>
+
+  <%= button_to meeting_guest_registration_path(meeting_id: meeting.id, token: params[:token]), method: :delete, class: "button button__sm md:button__lg button__secondary", form: { class: "form__wrapper-block" } do %>
+    <span><%= t("decidim.meetings_guest_registrations.guest_registrations.cancel.confirm") %></span>
+  <% end %>
+
+  <div class="form__wrapper-block">
+    <%= link_to t("decidim.meetings_guest_registrations.guest_registrations.cancel.keep"), Decidim::ResourceLocatorPresenter.new(meeting).path, class: "button button__sm md:button__lg button__text-secondary" %>
+  </div>
+<% end %>
