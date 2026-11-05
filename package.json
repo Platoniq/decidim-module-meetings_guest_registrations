@@ -4,10 +4,6 @@
   "description": "Guest (no account) registrations for Decidim meetings",
   "private": true,
   "license": "AGPL-3.0-or-later",
-  "scripts": {
-    "lint": "eslint -c .eslintrc.json --no-error-on-unmatched-pattern --ignore-pattern app/packs/vendor --ext .js app/packs",
-    "stylelint": "stylelint app/packs/**/*.scss"
-  },
   "dependencies": {
     "@decidim/browserslist-config": "^0.32.2",
     "@decidim/webpacker": "^0.32.2"
