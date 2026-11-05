@@ -9,19 +9,17 @@ Gem::Specification.new do |s|
   s.authors = ["Fran Bolívar"]
   s.email = ["francisco.bolivar@nazaries.com"]
   s.license = "AGPL-3.0-or-later"
-  s.homepage = "https://decidim.org"
+  s.homepage = "https://github.com/AjuntamentdeBarcelona/decidim-module-meetings_guest_registrations"
   s.metadata = {
-    "bug_tracker_uri" => "https://github.com/decidim/decidim/issues",
-    "documentation_uri" => "https://docs.decidim.org/",
-    "funding_uri" => "https://opencollective.com/decidim",
-    "homepage_uri" => "https://decidim.org",
-    "source_code_uri" => "https://github.com/decidim/decidim"
+    "bug_tracker_uri" => "https://github.com/AjuntamentdeBarcelona/decidim-module-meetings_guest_registrations/issues",
+    "source_code_uri" => "https://github.com/AjuntamentdeBarcelona/decidim-module-meetings_guest_registrations",
+    "rubygems_mfa_required" => "true"
   }
   s.required_ruby_version = "~> 3.4"
 
   s.name = "decidim-meetings_guest_registrations"
-  s.summary = "A decidim meetings_guest_registrations module"
-  s.description = "."
+  s.summary = "Registrations to Decidim meetings without an account"
+  s.description = "Lets people without an account register to the Decidim meetings that allow it, giving their name, email and phone."
 
   s.files = Dir.chdir(__dir__) do
     `git ls-files -z`.split("\x0").select do |f|
@@ -30,5 +28,8 @@ Gem::Specification.new do |s|
     end
   end
 
-  s.add_dependency "decidim-core", Decidim::MeetingsGuestRegistrations.version
+  s.add_dependency "decidim-core", Decidim::MeetingsGuestRegistrations::COMPAT_DECIDIM_VERSION
+  s.add_dependency "decidim-forms", Decidim::MeetingsGuestRegistrations::COMPAT_DECIDIM_VERSION
+  s.add_dependency "decidim-meetings", Decidim::MeetingsGuestRegistrations::COMPAT_DECIDIM_VERSION
+  s.add_dependency "deface", ">= 1.5"
 end

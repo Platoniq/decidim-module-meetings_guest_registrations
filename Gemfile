@@ -4,16 +4,16 @@ source "https://rubygems.org"
 
 ruby RUBY_VERSION
 
-gem "decidim", "~> 0.32.1"
+gem "decidim", "~> 0.32.2"
 gem "decidim-meetings_guest_registrations", path: "."
 
-gem "puma", ">= 6.3.1"
 gem "bootsnap", "~> 1.23"
+gem "puma", ">= 6.3.1"
 
 group :development, :test do
   gem "byebug", "~> 13.0", platform: :mri
 
-  gem "decidim-dev", "~> 0.32.1"
+  gem "decidim-dev", "~> 0.32.2"
 end
 
 group :development do
