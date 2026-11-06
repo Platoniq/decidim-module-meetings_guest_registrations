@@ -52,6 +52,7 @@ module Decidim
         Decidim::Meetings::Admin::UnpublishMeeting.prepend(Decidim::MeetingsGuestRegistrations::Admin::UnpublishMeetingOverride)
         Decidim::Meetings::Admin::CopyMeeting.prepend(Decidim::MeetingsGuestRegistrations::Admin::CopyMeetingOverride)
         Decidim::Meetings::UpdateMeeting.prepend(Decidim::MeetingsGuestRegistrations::NotifyGuestsOnUpdateOverride)
+        Decidim::Meetings::LeaveMeeting.prepend(Decidim::MeetingsGuestRegistrations::LeaveMeetingOverride)
         Decidim::Meetings::WithdrawMeeting.prepend(Decidim::MeetingsGuestRegistrations::WithdrawMeetingOverride)
 
         Decidim::Meetings::PromoteFromWaitlistJob.prepend(Decidim::MeetingsGuestRegistrations::PromoteFromWaitlistJobOverride)
@@ -60,7 +61,10 @@ module Decidim
         Decidim::Meetings::RegistrationPresenter.prepend(Decidim::MeetingsGuestRegistrations::RegistrationPresenterOverride)
         Decidim::Meetings::RegistrationSerializer.prepend(Decidim::MeetingsGuestRegistrations::RegistrationSerializerOverride)
         Decidim::Meetings::MeetingPermissions.prepend(Decidim::MeetingsGuestRegistrations::MeetingPermissionsOverride)
+        Decidim::Meetings::MeetingsController.prepend(Decidim::MeetingsGuestRegistrations::MeetingsControllerOverride)
         Decidim::Meetings::JoinMeetingButtonCell.prepend(Decidim::MeetingsGuestRegistrations::JoinMeetingButtonCellOverride)
+
+        Decidim::StatsParticipantsCount.prepend(Decidim::MeetingsGuestRegistrations::StatsParticipantsCountOverride)
       end
     end
   end
