@@ -44,14 +44,21 @@ module Decidim
         Decidim::Meetings::Meeting.prepend(Decidim::MeetingsGuestRegistrations::MeetingOverride)
         Decidim::Meetings::Registration.prepend(Decidim::MeetingsGuestRegistrations::RegistrationOverride)
 
+        Decidim::Meetings::Admin::MeetingRegistrationsForm.prepend(Decidim::MeetingsGuestRegistrations::Admin::MeetingRegistrationsFormOverride)
+        Decidim::Meetings::Admin::UpdateRegistrations.prepend(Decidim::MeetingsGuestRegistrations::Admin::UpdateRegistrationsOverride)
+        Decidim::Meetings::Admin::MarkAsAttendee.prepend(Decidim::MeetingsGuestRegistrations::Admin::MarkAsAttendeeOverride)
+        Decidim::Meetings::Admin::ValidateRegistrationCode.prepend(Decidim::MeetingsGuestRegistrations::Admin::ValidateRegistrationCodeOverride)
         Decidim::Meetings::Admin::UpdateMeeting.prepend(Decidim::MeetingsGuestRegistrations::NotifyGuestsOnUpdateOverride)
         Decidim::Meetings::Admin::UnpublishMeeting.prepend(Decidim::MeetingsGuestRegistrations::Admin::UnpublishMeetingOverride)
+        Decidim::Meetings::Admin::CopyMeeting.prepend(Decidim::MeetingsGuestRegistrations::Admin::CopyMeetingOverride)
         Decidim::Meetings::UpdateMeeting.prepend(Decidim::MeetingsGuestRegistrations::NotifyGuestsOnUpdateOverride)
         Decidim::Meetings::WithdrawMeeting.prepend(Decidim::MeetingsGuestRegistrations::WithdrawMeetingOverride)
 
         Decidim::Meetings::PromoteFromWaitlistJob.prepend(Decidim::MeetingsGuestRegistrations::PromoteFromWaitlistJobOverride)
         Decidim::Meetings::UpcomingMeetingNotificationJob.prepend(Decidim::MeetingsGuestRegistrations::UpcomingMeetingNotificationJobOverride)
 
+        Decidim::Meetings::RegistrationPresenter.prepend(Decidim::MeetingsGuestRegistrations::RegistrationPresenterOverride)
+        Decidim::Meetings::RegistrationSerializer.prepend(Decidim::MeetingsGuestRegistrations::RegistrationSerializerOverride)
         Decidim::Meetings::MeetingPermissions.prepend(Decidim::MeetingsGuestRegistrations::MeetingPermissionsOverride)
         Decidim::Meetings::JoinMeetingButtonCell.prepend(Decidim::MeetingsGuestRegistrations::JoinMeetingButtonCellOverride)
       end

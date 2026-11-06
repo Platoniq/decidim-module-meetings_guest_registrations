@@ -1,0 +1,8 @@
+<!-- insert_bottom ".card-section" -->
+<div class="row column">
+  <%= form.check_box :guest_registrations_enabled, help_text: t("decidim.meetings_guest_registrations.admin.registrations.form.guest_registrations_enabled_help") %>
+</div>
+
+<div class="row column">
+  <%= form.translated :editor, :guest_registrations_privacy_text, toolbar: :content, help_text: t("decidim.meetings_guest_registrations.admin.registrations.form.guest_registrations_privacy_text_help"), aria: { label: :guest_registrations_privacy_text } %>
+</div>

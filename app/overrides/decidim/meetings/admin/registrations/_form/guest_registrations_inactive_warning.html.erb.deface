@@ -1,0 +1,4 @@
+<!-- insert_top ".card-section" -->
+<% if meeting.guest_registrations_enabled? && meeting.join_requires_verification? %>
+  <%= cell("decidim/announcement", t("decidim.meetings_guest_registrations.admin.registrations.form.guest_registrations_inactive"), callout_class: "warning") %>
+<% end %>
