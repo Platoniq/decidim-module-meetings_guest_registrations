@@ -1,13 +1,9 @@
-name: "[CI] MeetingsGuestRegistrations"
+name: "[CI] Test"
 on:
   push:
     branches:
-      - develop
-      - release/*
-      - "*-stable"
+      - main
   pull_request:
-    branches-ignore:
-      - "chore/l10n*"
 
 env:
   CI: "true"
@@ -19,7 +15,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  main:
+  test:
     name: Tests
     runs-on: ubuntu-24.04
     timeout-minutes: 30
