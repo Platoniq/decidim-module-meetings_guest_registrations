@@ -32,6 +32,12 @@ module Decidim::MeetingsGuestRegistrations
         expect(CGI.unescape(html)).to include("token=#{guest.cancellation_token}")
       end
 
+      it "does not include the QR when registration codes are disabled" do
+        component.update!(settings: { registration_code_enabled: false })
+
+        expect(mail.attachments.map(&:filename)).to eq(["meeting-calendar-info.ics"])
+      end
+
       context "when the registration code is enabled" do
         before { component.update!(settings: { registration_code_enabled: true }) }
 
@@ -78,6 +84,12 @@ module Decidim::MeetingsGuestRegistrations
         meeting.update!(reminder_message_custom_content: { es: "<p>Faltan {{before_hours}} horas</p>" }, send_reminders_before_hours: 48)
 
         expect(html).to include("Faltan 48 horas")
+      end
+
+      it "skips an empty custom reminder message" do
+        meeting.update!(reminder_message_custom_content: { es: "<p></p>" })
+
+        expect(html).not_to include("<div><p></p></div>")
       end
 
       context "when the meeting is online" do

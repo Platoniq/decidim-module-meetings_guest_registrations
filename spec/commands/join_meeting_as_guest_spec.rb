@@ -154,6 +154,50 @@ module Decidim::MeetingsGuestRegistrations
           expect(meeting.registrations.count).to eq(0)
         end
       end
+
+      # ResponseQuestionnaire validates the form again inside the lock.
+      context "when the form stops being valid inside the lock" do
+        before { allow(form).to receive(:invalid?).and_return(false, true) }
+
+        it "does not register" do
+          expect { subject.call }.to broadcast(:invalid_form)
+          expect(meeting.registrations.count).to eq(0)
+          expect(meeting.questionnaire.responses.count).to eq(0)
+        end
+      end
+    end
+
+    # The form rejects a registered email, but another request can register it
+    # between that validation and the lock.
+    context "when the same email is registered after validating the form" do
+      before do
+        allow(form).to receive(:invalid?).and_return(false)
+        create(:guest_registration, meeting:, email:)
+      end
+
+      it "is invalid with the email taken" do
+        expect { subject.call }.to broadcast(:invalid_form)
+        expect(form.errors.details[:email]).to include(error: :taken)
+        expect(meeting.registrations.count).to eq(1)
+      end
+    end
+
+    # Two requests that pass every check at the same time: the unique index on
+    # the email digest stops the second one.
+    context "when the unique index rejects the registration" do
+      before do
+        allow(Decidim::Meetings::Registration).to receive(:new).and_wrap_original do |method, *args, **kwargs|
+          method.call(*args, **kwargs).tap do |registration|
+            allow(registration).to receive(:save!).and_raise(ActiveRecord::RecordNotUnique)
+          end
+        end
+      end
+
+      it "is invalid with the email taken" do
+        expect { subject.call }.to broadcast(:invalid_form)
+        expect(form.errors.details[:email]).to include(error: :taken)
+        expect(meeting.registrations.count).to eq(0)
+      end
     end
   end
 end

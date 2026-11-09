@@ -43,6 +43,14 @@ module Decidim::MeetingsGuestRegistrations
         expect(waiting.registration.reload).to be_registered
         expect(ActionMailer::Base.deliveries.map(&:subject)).to include(a_string_including("You have a place"))
       end
+
+      context "when the guest who cancels is also on the waiting list" do
+        subject { described_class.new(waiting) }
+
+        it "does not promote anyone" do
+          expect { subject.call }.not_to have_enqueued_job(Decidim::Meetings::PromoteFromWaitlistJob)
+        end
+      end
     end
 
     it "does not put the guest data in clear in the job arguments" do

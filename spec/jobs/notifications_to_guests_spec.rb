@@ -50,6 +50,16 @@ describe "Notifications to guests" do # rubocop:disable RSpec/DescribeClass
       expect(updates.map(&:to).flatten).to contain_exactly("ana@example.org", "waiting@example.org")
     end
 
+    it "does not e-mail guests while the meeting is unpublished" do
+      meeting.update!(published_at: nil)
+      form.start_time = meeting.start_time + 1.day
+      form.end_time = meeting.end_time + 1.day
+
+      perform_enqueued_jobs { described_class.call(form, meeting) }
+
+      expect(guest_mails).to be_empty
+    end
+
     it "does not e-mail guests for other changes" do
       form.title = { en: "New title" }
 
@@ -69,6 +79,15 @@ describe "Notifications to guests" do # rubocop:disable RSpec/DescribeClass
 
       expect(guest_mails.map(&:to).flatten).to contain_exactly("ana@example.org", "waiting@example.org")
       expect(guest_mails.first.subject).to include("Meeting cancelled")
+    end
+
+    it "does not e-mail guests when the meeting is over" do
+      meeting.update!(start_time: 2.days.ago, end_time: 1.day.ago)
+
+      perform_enqueued_jobs { described_class.call(meeting, author) }
+
+      expect(meeting.reload).to be_withdrawn
+      expect(guest_mails).to be_empty
     end
   end
 
@@ -126,6 +145,15 @@ describe "Notifications to guests" do # rubocop:disable RSpec/DescribeClass
 
       expect(guest_mails.map(&:to).flatten).to contain_exactly("ana@example.org", "waiting@example.org")
       expect(Decidim::MeetingsGuestRegistrations::GuestRegistration.count).to eq(0)
+    end
+
+    it "keeps the guests of a meeting that is over" do
+      meeting.update!(start_time: 2.days.ago, end_time: 1.day.ago)
+
+      perform_enqueued_jobs { described_class.call(meeting, admin) }
+
+      expect(guest_mails).to be_empty
+      expect(Decidim::MeetingsGuestRegistrations::GuestRegistration.count).to eq(2)
     end
 
     it "does not put the guest data in clear in the job arguments" do
@@ -204,6 +232,22 @@ describe "Notifications to guests" do # rubocop:disable RSpec/DescribeClass
     end
   end
 
+  describe "destroying a meeting" do
+    it "e-mails the cancellation to guests" do
+      perform_enqueued_jobs { meeting.destroy! }
+
+      expect(guest_mails.map(&:to).flatten).to contain_exactly("ana@example.org", "waiting@example.org")
+    end
+
+    it "does not e-mail guests when the meeting is over" do
+      meeting.update!(start_time: 2.days.ago, end_time: 1.day.ago)
+
+      perform_enqueued_jobs { meeting.destroy! }
+
+      expect(guest_mails).to be_empty
+    end
+  end
+
   describe Decidim::Meetings::PromoteFromWaitlistJob do
     it "e-mails the promoted guest instead of notifying" do
       meeting.update!(available_slots: 10, reserved_slots: 0)
@@ -214,6 +258,18 @@ describe "Notifications to guests" do # rubocop:disable RSpec/DescribeClass
       expect(waiting_guest.registration.reload).to be_registered
       expect(guest_mails.map(&:to).flatten).to eq(["waiting@example.org"])
       expect(guest_mails.first.subject).to include("You have a place")
+    end
+
+    it "keeps notifying the promoted users" do
+      waiting_guest.registration.destroy!
+      user_registration = create(:registration, meeting:, status: :waiting_list)
+      meeting.update!(available_slots: 10, reserved_slots: 0)
+
+      expect(Decidim::EventsManager).to receive(:publish)
+        .with(hash_including(event: "decidim.events.meetings.meeting_registration_confirmed", affected_users: [user_registration.user]))
+      described_class.perform_now(meeting.id)
+
+      expect(user_registration.reload).to be_registered
     end
 
     it "e-mails the promoted guest while the component is unpublished" do
