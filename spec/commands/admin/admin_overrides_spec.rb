@@ -66,6 +66,15 @@ describe "Admin commands with guests" do # rubocop:disable RSpec/DescribeClass
       expect { described_class.call(registration) }.to broadcast(:ok)
       expect(registration.reload).to be_validated
     end
+
+    it "keeps notifying users" do
+      user_registration = create(:registration, meeting:)
+
+      expect(Decidim::EventsManager).to receive(:publish)
+        .with(hash_including(event: "decidim.events.meetings.registration_marked_as_attendee", affected_users: [user_registration.user]))
+
+      expect { described_class.call(user_registration) }.to broadcast(:ok)
+    end
   end
 
   describe Decidim::Meetings::Admin::ValidateRegistrationCode do
@@ -78,6 +87,20 @@ describe "Admin commands with guests" do # rubocop:disable RSpec/DescribeClass
 
       expect { described_class.call(form, meeting) }.to broadcast(:ok)
       expect(registration.reload).to be_validated
+    end
+
+    context "with a user registration" do
+      let(:user_registration) { create(:registration, meeting:) }
+      let(:form) do
+        Decidim::Meetings::Admin::ValidateRegistrationCodeForm.from_params(code: user_registration.code).with_context(current_organization: organization, meeting:)
+      end
+
+      it "keeps notifying the user" do
+        expect(Decidim::EventsManager).to receive(:publish)
+          .with(hash_including(event: "decidim.events.meetings.registration_code_validated", affected_users: [user_registration.user]))
+
+        expect { described_class.call(form, meeting) }.to broadcast(:ok)
+      end
     end
   end
 
