@@ -64,7 +64,17 @@ jobs:
         working-directory: ./spec/decidim_dummy_app/
       - run: bundle exec rspec
         name: RSpec
-      - uses: codecov/codecov-action@v6
+        env:
+          SIMPLECOV: "true"
+      # Uses the GITHUB_TOKEN: no Coveralls key is needed once the repository
+      # is enabled in coveralls.io. Until then, a failed upload does not fail
+      # the build.
+      - uses: coverallsapp/github-action@v2
+        name: Upload coverage to Coveralls
+        with:
+          file: coverage/coverage.xml
+          format: cobertura
+          fail-on-error: false
       - uses: actions/upload-artifact@v7
         if: always()
         with:
