@@ -14,6 +14,8 @@ group :development, :test do
   gem "byebug", "~> 13.0", platform: :mri
 
   gem "decidim-dev", "~> 0.32.2"
+  # The test app ships initiatives signature handlers, loaded when CI eager loads.
+  gem "decidim-initiatives", "~> 0.32.2"
 end
 
 group :development do

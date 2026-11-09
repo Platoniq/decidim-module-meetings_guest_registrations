@@ -323,6 +323,11 @@ GEM
       decidim-core (= 0.32.2)
     decidim-generators (0.32.2)
       decidim-core (= 0.32.2)
+    decidim-initiatives (0.32.2)
+      decidim-admin (= 0.32.2)
+      decidim-comments (= 0.32.2)
+      decidim-core (= 0.32.2)
+      decidim-verifications (= 0.32.2)
     decidim-meetings (0.32.2)
       decidim-core (= 0.32.2)
       decidim-forms (= 0.32.2)
@@ -1020,6 +1025,7 @@ DEPENDENCIES
   byebug (~> 13.0)
   decidim (~> 0.32.2)
   decidim-dev (~> 0.32.2)
+  decidim-initiatives (~> 0.32.2)
   decidim-meetings_guest_registrations!
   faker (~> 3.2)
   letter_opener_web (~> 3.0)
@@ -1097,6 +1103,7 @@ CHECKSUMS
   decidim-dev (0.32.2) sha256=3329ca7aabd87f2c3827b4bea1d1b22b587db81461fa44be7bd941885d4f73da
   decidim-forms (0.32.2) sha256=b0df9dad495e93b829f7bdaadd4b052cd9b9a2143cdc85061660d92adf041bbf
   decidim-generators (0.32.2) sha256=1eb4233c4dfc7d791177882f8ed1408297754847e8027298ce7bb6f204dbc47d
+  decidim-initiatives (0.32.2) sha256=2b99f208b3d5cf2a38d724b1dce47ec8a22a798459f7972a51dc759577c1bc93
   decidim-meetings (0.32.2) sha256=90f91442f0425e8f6c35a6ccd56208802939792efbbad58503ab956394366456
   decidim-meetings_guest_registrations (0.1.0)
   decidim-pages (0.32.2) sha256=4c3b13597f0cf62eeac35c412962d4800228afbbc49e3d7b34b3720dc24c00a9
