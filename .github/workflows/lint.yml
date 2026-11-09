@@ -1,0 +1,43 @@
+name: "[CI] Lint"
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+env:
+  CI: "true"
+  RUBY_VERSION: 3.4.7
+  NODE_VERSION: 22.14.0
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        command:
+          - bundle exec rubocop -P
+          - bundle exec erb_lint --lint-all
+          - npm run linthtml
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+        name: Install JS dependencies
+      - run: ${{ matrix.command }}
+        name: ${{ matrix.command }}
