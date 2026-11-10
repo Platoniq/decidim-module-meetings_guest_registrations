@@ -1,5 +1,7 @@
 # Decidim::MeetingsGuestRegistrations
 
+[![Coverage Status](https://coveralls.io/repos/github/AjuntamentdeBarcelona/decidim-module-meetings_guest_registrations/badge.svg?branch=main)](https://coveralls.io/github/AjuntamentdeBarcelona/decidim-module-meetings_guest_registrations?branch=main)
+
 Registrations to Decidim meetings for people without an account.
 
 In the meetings that enable it, a visitor without session can register by giving their name and surname, email and phone. Signed in participants keep using the regular Decidim flow.
@@ -91,6 +93,12 @@ The public guest pages are served by `Decidim::Meetings::GuestRegistrationsContr
 ```bash
 bundle exec rake test_app
 bundle exec rspec
+```
+
+Code coverage is measured with SimpleCov (shipped with `decidim-dev`), as in Decidim: it runs when `SIMPLECOV` is set and is configured in `.simplecov`.
+
+```bash
+SIMPLECOV=true bundle exec rspec   # HTML report in coverage/index.html
 ```
 
 ## Linting
