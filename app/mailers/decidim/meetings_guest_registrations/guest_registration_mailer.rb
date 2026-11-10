@@ -121,9 +121,8 @@ module Decidim
         strip_tags(translated_attribute(@meeting.title)).squish
       end
 
+      # Only the e-mails about an existing registration show the link.
       def cancel_url
-        return if @guest_registration.blank?
-
         Decidim::EngineRouter.main_proxy(@meeting.component).cancel_meeting_guest_registration_url(
           meeting_id: @meeting.id,
           token: @guest_registration.cancellation_token,

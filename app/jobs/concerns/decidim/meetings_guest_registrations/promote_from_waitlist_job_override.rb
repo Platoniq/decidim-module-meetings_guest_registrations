@@ -10,7 +10,6 @@ module Decidim
 
       def notify_user(registration)
         return super unless registration.guest?
-        return if registration.guest_registration.blank?
 
         guest_registration_id = registration.guest_registration.id
         MeetingsGuestRegistrations.after_commit do
