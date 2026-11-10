@@ -12,6 +12,13 @@ module Decidim
 
           super
         end
+
+        # Decidim 0.32 bug: the core `send_notification` uses `meeting`, which
+        # the command does not define, so marking a user as attendee raises a
+        # NameError after saving the attendance.
+        def meeting
+          registration.meeting
+        end
       end
     end
   end
