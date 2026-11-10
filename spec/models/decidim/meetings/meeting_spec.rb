@@ -37,6 +37,14 @@ describe Decidim::Meetings::Meeting do
       it { is_expected.not_to be_guest_registrations_allowed }
     end
 
+    context "when the component requires a verification with the single handler format" do
+      before do
+        meeting.component.update!(permissions: { "join" => { "authorization_handler_name" => "dummy_authorization_handler" } })
+      end
+
+      it { is_expected.not_to be_guest_registrations_allowed }
+    end
+
     context "when the required verification is not available in the organization" do
       before do
         meeting.component.update!(permissions: { "join" => { "authorization_handlers" => { "not_available_handler" => {} } } })

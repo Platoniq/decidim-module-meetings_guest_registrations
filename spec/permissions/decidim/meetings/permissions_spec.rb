@@ -30,4 +30,40 @@ describe Decidim::Meetings::Permissions do
       it { is_expected.to be(false) }
     end
   end
+
+  context "when cancelling a guest registration" do
+    let(:action) { :cancel_guest_registration }
+    let(:guest) { create(:guest_registration, meeting:) }
+    let(:context) { { current_component: meeting.component, meeting:, guest_registration: guest } }
+
+    it { is_expected.to be(true) }
+
+    context "without the guest registration of the link" do
+      let(:guest) { nil }
+
+      it { is_expected.to be(false) }
+    end
+
+    context "with the guest registration of another meeting" do
+      let(:guest) { create(:guest_registration) }
+
+      it { is_expected.to be(false) }
+    end
+  end
+
+  context "when declining an invitation" do
+    let(:action) { :decline_invitation }
+
+    it "is not allowed without a user" do
+      expect(subject).to be(false)
+    end
+
+    context "with an invited user" do
+      let(:user) { create(:user, :confirmed, organization: meeting.organization) }
+
+      before { create(:invite, meeting:, user:) }
+
+      it { is_expected.to be(true) }
+    end
+  end
 end
