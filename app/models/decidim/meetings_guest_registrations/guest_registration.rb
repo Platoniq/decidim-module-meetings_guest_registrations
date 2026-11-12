@@ -40,11 +40,20 @@ module Decidim
 
       delegate :organization, to: :meeting
 
+      # Whether a guest, or a user with that email, is registered to the
+      # meeting: the same person must not take two slots.
       def self.registered_with_email?(meeting, email)
         digest = EmailDigest.call(email)
         return false if digest.blank?
 
-        exists?(meeting:, email_digest: digest)
+        exists?(meeting:, email_digest: digest) || user_registered_with_email?(meeting, email)
+      end
+
+      def self.user_registered_with_email?(meeting, email)
+        Decidim::Meetings::Registration
+          .where(meeting:)
+          .joins(:user)
+          .exists?(["LOWER(decidim_users.email) = ?", EmailDigest.normalize(email)])
       end
 
       def cancellation_token

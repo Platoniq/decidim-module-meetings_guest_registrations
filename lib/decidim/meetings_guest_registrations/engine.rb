@@ -52,6 +52,8 @@ module Decidim
         Decidim::Meetings::Admin::UnpublishMeeting.prepend(Decidim::MeetingsGuestRegistrations::Admin::UnpublishMeetingOverride)
         Decidim::Meetings::Admin::CopyMeeting.prepend(Decidim::MeetingsGuestRegistrations::Admin::CopyMeetingOverride)
         Decidim::Meetings::UpdateMeeting.prepend(Decidim::MeetingsGuestRegistrations::NotifyGuestsOnUpdateOverride)
+        Decidim::Meetings::JoinMeeting.prepend(Decidim::MeetingsGuestRegistrations::ClaimGuestRegistrationOverride)
+        Decidim::Meetings::JoinWaitlist.prepend(Decidim::MeetingsGuestRegistrations::ClaimGuestRegistrationOverride)
         Decidim::Meetings::LeaveMeeting.prepend(Decidim::MeetingsGuestRegistrations::LeaveMeetingOverride)
         Decidim::Meetings::WithdrawMeeting.prepend(Decidim::MeetingsGuestRegistrations::WithdrawMeetingOverride)
 

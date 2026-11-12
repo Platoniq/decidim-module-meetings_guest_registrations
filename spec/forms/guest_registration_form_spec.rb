@@ -50,5 +50,20 @@ module Decidim::MeetingsGuestRegistrations
       expect(form).not_to be_valid
       expect(form.errors[:email]).to be_present
     end
+
+    it "rejects the email of a user registered to the meeting" do
+      user = create(:user, :confirmed, organization: meeting.organization, email: "ana@example.org")
+      create(:registration, meeting:, user:)
+
+      expect(form).not_to be_valid
+      expect(form.errors.details[:email]).to include(error: :taken)
+    end
+
+    it "accepts the email of a user registered to another meeting" do
+      user = create(:user, :confirmed, organization: meeting.organization, email: "ana@example.org")
+      create(:registration, user:)
+
+      expect(form).to be_valid
+    end
   end
 end
