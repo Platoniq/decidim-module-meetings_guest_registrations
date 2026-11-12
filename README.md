@@ -11,6 +11,7 @@ In the meetings that enable it, a visitor without session can register by giving
 - All registrations, with or without account, live in `decidim_meetings_registrations`. Capacity, waiting list, registration codes, QR, the admin list and "mark as attendee" keep working on a single table.
 - Guest registrations have `decidim_user_id = NULL`. Their personal data is in `decidim_meetings_guest_registrations`, one row per registration, encrypted with `Decidim::AttributeEncryptor` (based on `secret_key_base`).
 - One registration per email and meeting, enforced with a unique index on a HMAC of the normalized email (the key is derived from `secret_key_base`).
+- The same person cannot take two places. A guest cannot register with the email of a user already registered to the meeting. When a signed in user joins a meeting where they registered as a guest with the same email, the user takes over that registration: it keeps its status, code and place in the waiting list, and the guest data is deleted. Guest emails are not confirmed, so rejecting the user would let anyone block them by registering their email first. Only confirmed accounts take over a guest registration.
 - Guests receive e-mails in the language they used to register and in the time zone of the organization: confirmation (with `.ics`, QR if registration codes are enabled, custom content and a cancellation link), waiting list, place obtained from the waiting list, changes of date, time or place, cancellation of the meeting (withdrawn, unpublished or trashed), the reminder before the meeting (with the custom reminder message, if any) and the confirmation of their own cancellation.
 - Online and hybrid meetings: registered guests get the online meeting link by e-mail (confirmation, changes and reminder), because the meeting page only shows it to signed in or registered users when its access is restricted.
 - Nothing is sent about a meeting that is no longer active (unpublished, withdrawn, hidden or trashed), apart from the cancellation itself.
@@ -84,7 +85,6 @@ The public guest pages are served by `Decidim::Meetings::GuestRegistrationsContr
 ## Limitations
 
 - The email is not confirmed: the place is booked when the form is sent. The form has an invisible captcha and one registration per email and meeting.
-- The same person can register with their account and as a guest.
 - Guests cannot turn their registration into an account.
 - No SMS: the phone is only for the organizers.
 

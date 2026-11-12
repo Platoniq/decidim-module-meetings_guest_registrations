@@ -85,6 +85,19 @@ module Decidim::MeetingsGuestRegistrations
       end
     end
 
+    context "when the user with that email registered after validating the form" do
+      before do
+        allow(form).to receive(:invalid?).and_return(false)
+        create(:registration, meeting:, user: create(:user, :confirmed, organization:, email:))
+      end
+
+      it "is invalid with the email taken" do
+        expect { subject.call }.to broadcast(:invalid_form)
+        expect(form.errors.details[:email]).to include(error: :taken)
+        expect(meeting.registrations.count).to eq(1)
+      end
+    end
+
     context "when the form is not valid" do
       let(:params) { super().merge(privacy_agreement: "0") }
 
