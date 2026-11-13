@@ -1,0 +1,129 @@
+---
+es:
+  activemodel:
+    attributes:
+      guest_registration:
+        email: Correo electrónico
+        name: Nombre y apellidos
+        phone: Teléfono
+        privacy_agreement: He leído y acepto la información sobre protección de datos
+        tos_agreement: Acepto las condiciones de inscripción
+      meeting:
+        guest_registrations_enabled: Permitir inscripciones sin cuenta
+        guest_registrations_privacy_text: Información sobre protección de datos para
+          las inscripciones sin cuenta
+    errors:
+      models:
+        guest_registration:
+          attributes:
+            email:
+              taken: ya está inscrito en este encuentro
+        meeting:
+          attributes:
+            guest_registrations_enabled:
+              verification_required: no se puede activar porque inscribirse en este
+                encuentro requiere una verificación
+  activerecord:
+    errors:
+      models:
+        decidim/meetings/registration:
+          attributes:
+            base:
+              user_or_guest_required: Una inscripción tiene que pertenecer a una usuaria
+                o a una persona invitada, pero no a las dos
+  decidim:
+    meetings_guest_registrations:
+      admin:
+        registrations:
+          form:
+            guest_registrations_enabled_help: Las personas sin cuenta podrán inscribirse
+              con su nombre, correo electrónico y teléfono. No se puede activar si
+              inscribirse en el encuentro requiere una verificación.
+            guest_registrations_inactive: 'Las inscripciones sin cuenta están activadas,
+              pero no funcionan: ahora inscribirse en este encuentro requiere una
+              verificación. Quita la verificación o desactiva la opción.'
+            guest_registrations_privacy_text_help: Obligatorio si se permiten las
+              inscripciones sin cuenta. Se muestra en el formulario de inscripción
+              de las personas sin cuenta.
+        registrations_attendees:
+          phone: Teléfono
+          registration_type: Tipo
+      guest_registrations:
+        cancel:
+          confirm: Cancelar mi inscripción
+          invalid_token: Este enlace de cancelación no es válido o la inscripción
+            ya se ha cancelado.
+          keep: Mantener mi inscripción
+          question_html: "¿Quieres cancelar tu inscripción en el encuentro <strong>%{title}</strong>?"
+          release_slot: Tu plaza quedará libre para otras personas.
+          title: Cancelar la inscripción
+        create:
+          invalid: Ahora mismo no te puedes inscribir en este encuentro.
+          invalid_form: Ha habido un problema con tu inscripción. Revisa el formulario.
+          success: Tu inscripción se ha confirmado. Te hemos enviado un correo electrónico
+            con los detalles.
+          waitlist_success: Te hemos añadido a la lista de espera. Te hemos enviado
+            un correo electrónico.
+        destroy:
+          invalid: No se ha podido cancelar tu inscripción.
+          success: Tu inscripción se ha cancelado.
+        new:
+          back: Volver al encuentro
+          intro: Puedes inscribirte sin cuenta. Usaremos estos datos para gestionar
+            tu inscripción y para contactar contigo sobre este encuentro.
+          phone_help: Las organizadoras solo lo usarán para contactar contigo sobre
+            este encuentro.
+          privacy_agreement: He leído y acepto la información sobre protección de
+            datos
+          submit: Inscribirme
+          submit_waitlist: Apuntarme a la lista de espera
+          title: Inscripción al encuentro
+          tos_agreement: Acepto las condiciones de inscripción
+          waitlist_notice: No quedan plazas. Si te inscribes, entrarás en la lista
+            de espera y te avisaremos por correo electrónico si queda una plaza libre.
+        not_allowed:
+          cancel: Esta inscripción ya no se puede cancelar.
+          create: Las inscripciones sin cuenta no están disponibles en este encuentro.
+          destroy: Esta inscripción ya no se puede cancelar.
+          new: Las inscripciones sin cuenta no están disponibles en este encuentro.
+      mailer:
+        calendar_attached: Los datos del encuentro van adjuntos en un archivo de calendario.
+        cancel_link_html: Si no puedes asistir, puedes <a href="%{url}">cancelar tu
+          inscripción</a>.
+        confirmation:
+          body_html: Tu inscripción en el encuentro <a href="%{url}">%{title}</a>
+            se ha confirmado.
+          subject: 'Inscripción confirmada: %{meeting_title}'
+        greeting: 'Hola, %{name}:'
+        meeting_cancelled:
+          body_html: Se ha cancelado el encuentro <a href="%{url}">%{title}</a> en
+            el que te habías inscrito.
+          subject: 'Encuentro cancelado: %{meeting_title}'
+        meeting_updated:
+          body_html: Ha cambiado la fecha, la hora o el lugar del encuentro <a href="%{url}">%{title}</a>.
+            Estos son los nuevos datos.
+          subject: 'Cambios en el encuentro: %{meeting_title}'
+        online_meeting_html: 'Conéctate al encuentro: <a href="%{url}">%{url}</a>'
+        promoted:
+          body_html: Ha quedado una plaza libre y tu inscripción en el encuentro <a
+            href="%{url}">%{title}</a> ya está confirmada.
+          subject: 'Tienes plaza: %{meeting_title}'
+        registration_cancelled:
+          body_html: Se ha cancelado tu inscripción en el encuentro <a href="%{url}">%{title}</a>.
+          subject: 'Inscripción cancelada: %{meeting_title}'
+        registration_code: Tu código de inscripción es %{code}. Enseña este código
+          QR a las organizadoras para validar tu asistencia.
+        reminder:
+          body_html: Te recordamos que el encuentro <a href="%{url}">%{title}</a>
+            es pronto.
+          subject: 'Recordatorio: %{meeting_title}'
+        waitlist:
+          body_html: No quedan plazas para el encuentro <a href="%{url}">%{title}</a>,
+            así que te hemos añadido a la lista de espera. Te avisaremos por correo
+            electrónico si queda una plaza libre.
+          subject: 'Lista de espera: %{meeting_title}'
+        when: 'Cuándo:'
+        where: 'Dónde:'
+      registration_type:
+        guest: Sin cuenta
+        user: Con cuenta

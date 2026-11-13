@@ -1,0 +1,25 @@
+<p class="email-greeting"><%= t("decidim.meetings_guest_registrations.mailer.greeting", name: @name) %></p>
+
+<p class="email-instructions"><%= t("decidim.meetings_guest_registrations.mailer.#{@kind}.body_html", title: present(@meeting).title(html_escape: true), url: @locator.url) %></p>
+
+<% if reminder_custom_message.present? %>
+  <div><%= reminder_custom_message %></div>
+<% end %>
+
+<p>
+  <strong><%= t("decidim.meetings_guest_registrations.mailer.when") %></strong>
+  <%= l(@meeting.start_time, format: :decidim_short) %> - <%= l(@meeting.end_time, format: :decidim_short) %>
+</p>
+
+<% if @meeting.address.present? || translated_attribute(@meeting.location).present? %>
+  <p>
+    <strong><%= t("decidim.meetings_guest_registrations.mailer.where") %></strong>
+    <%= [translated_attribute(@meeting.location), @meeting.address].compact_blank.join(", ") %>
+  </p>
+<% end %>
+
+<p class="email-instructions"><%= t("decidim.meetings_guest_registrations.mailer.calendar_attached") %></p>
+
+<%= render "decidim/meetings_guest_registrations/guest_registration_mailer/online_link" %>
+
+<%= render "decidim/meetings_guest_registrations/guest_registration_mailer/cancel_link" %>

@@ -1,0 +1,129 @@
+---
+ca:
+  activemodel:
+    attributes:
+      guest_registration:
+        email: Correu electrònic
+        name: Nom i cognoms
+        phone: Telèfon
+        privacy_agreement: He llegit i accepto la informació sobre protecció de dades
+        tos_agreement: Accepto les condicions d'inscripció
+      meeting:
+        guest_registrations_enabled: Permetre inscripcions sense compte
+        guest_registrations_privacy_text: Informació sobre protecció de dades per
+          a les inscripcions sense compte
+    errors:
+      models:
+        guest_registration:
+          attributes:
+            email:
+              taken: ja està inscrit en aquesta trobada
+        meeting:
+          attributes:
+            guest_registrations_enabled:
+              verification_required: no es pot activar perquè inscriure's en aquesta
+                trobada requereix una verificació
+  activerecord:
+    errors:
+      models:
+        decidim/meetings/registration:
+          attributes:
+            base:
+              user_or_guest_required: Una inscripció ha de pertànyer a una usuària
+                o a una persona convidada, però no a totes dues
+  decidim:
+    meetings_guest_registrations:
+      admin:
+        registrations:
+          form:
+            guest_registrations_enabled_help: Les persones sense compte es podran
+              inscriure amb el seu nom, correu electrònic i telèfon. No es pot activar
+              si inscriure's a la trobada requereix una verificació.
+            guest_registrations_inactive: 'Les inscripcions sense compte estan activades,
+              però no funcionen: ara inscriure''s a aquesta trobada requereix una
+              verificació. Treu la verificació o desactiva l''opció.'
+            guest_registrations_privacy_text_help: Obligatori si es permeten les inscripcions
+              sense compte. Es mostra al formulari d'inscripció de les persones sense
+              compte.
+        registrations_attendees:
+          phone: Telèfon
+          registration_type: Tipus
+      guest_registrations:
+        cancel:
+          confirm: Cancel·lar la meva inscripció
+          invalid_token: Aquest enllaç de cancel·lació no és vàlid o la inscripció
+            ja s'ha cancel·lat.
+          keep: Mantenir la meva inscripció
+          question_html: Vols cancel·lar la teva inscripció a la trobada <strong>%{title}</strong>?
+          release_slot: La teva plaça quedarà lliure per a altres persones.
+          title: Cancel·lar la inscripció
+        create:
+          invalid: Ara mateix no et pots inscriure a aquesta trobada.
+          invalid_form: Hi ha hagut un problema amb la teva inscripció. Revisa el
+            formulari.
+          success: La teva inscripció s'ha confirmat. T'hem enviat un correu electrònic
+            amb els detalls.
+          waitlist_success: T'hem afegit a la llista d'espera. T'hem enviat un correu
+            electrònic.
+        destroy:
+          invalid: No s'ha pogut cancel·lar la teva inscripció.
+          success: La teva inscripció s'ha cancel·lat.
+        new:
+          back: Tornar a la trobada
+          intro: Et pots inscriure sense compte. Farem servir aquestes dades per gestionar
+            la teva inscripció i per contactar amb tu sobre aquesta trobada.
+          phone_help: Les organitzadores només el faran servir per contactar amb tu
+            sobre aquesta trobada.
+          privacy_agreement: He llegit i accepto la informació sobre protecció de
+            dades
+          submit: Inscriure'm
+          submit_waitlist: Apuntar-me a la llista d'espera
+          title: Inscripció a la trobada
+          tos_agreement: Accepto les condicions d'inscripció
+          waitlist_notice: No queden places. Si t'inscrius, entraràs a la llista d'espera
+            i t'avisarem per correu electrònic si queda una plaça lliure.
+        not_allowed:
+          cancel: Aquesta inscripció ja no es pot cancel·lar.
+          create: Les inscripcions sense compte no estan disponibles en aquesta trobada.
+          destroy: Aquesta inscripció ja no es pot cancel·lar.
+          new: Les inscripcions sense compte no estan disponibles en aquesta trobada.
+      mailer:
+        calendar_attached: Les dades de la trobada van adjuntes en un fitxer de calendari.
+        cancel_link_html: Si no hi pots assistir, pots <a href="%{url}">cancel·lar
+          la teva inscripció</a>.
+        confirmation:
+          body_html: La teva inscripció a la trobada <a href="%{url}">%{title}</a>
+            s'ha confirmat.
+          subject: 'Inscripció confirmada: %{meeting_title}'
+        greeting: 'Hola, %{name}:'
+        meeting_cancelled:
+          body_html: S'ha cancel·lat la trobada <a href="%{url}">%{title}</a> a la
+            qual t'havies inscrit.
+          subject: 'Trobada cancel·lada: %{meeting_title}'
+        meeting_updated:
+          body_html: Ha canviat la data, l'hora o el lloc de la trobada <a href="%{url}">%{title}</a>.
+            Aquestes són les noves dades.
+          subject: 'Canvis a la trobada: %{meeting_title}'
+        online_meeting_html: 'Connecta''t a la trobada: <a href="%{url}">%{url}</a>'
+        promoted:
+          body_html: Ha quedat una plaça lliure i la teva inscripció a la trobada
+            <a href="%{url}">%{title}</a> ja està confirmada.
+          subject: 'Tens plaça: %{meeting_title}'
+        registration_cancelled:
+          body_html: S'ha cancel·lat la teva inscripció a la trobada <a href="%{url}">%{title}</a>.
+          subject: 'Inscripció cancel·lada: %{meeting_title}'
+        registration_code: El teu codi d'inscripció és %{code}. Ensenya aquest codi
+          QR a les organitzadores per validar la teva assistència.
+        reminder:
+          body_html: Et recordem que la trobada <a href="%{url}">%{title}</a> és aviat.
+          subject: 'Recordatori: %{meeting_title}'
+        waitlist:
+          body_html: No queden places per a la trobada <a href="%{url}">%{title}</a>,
+            així que t'hem afegit a la llista d'espera. T'avisarem per correu electrònic
+            si queda una plaça lliure.
+          subject: 'Llista d''espera: %{meeting_title}'
+        when: 'Quan:'
+        where: 'On:'
+      registration_type:
+        guest: Sense compte
+        user: Amb compte

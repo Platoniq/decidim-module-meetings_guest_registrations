@@ -1,10 +1,13 @@
 # frozen_string_literal: true
 
 module Decidim
-  # This holds the decidim-meetings version.
   module MeetingsGuestRegistrations
+    VERSION = "0.1.0"
+    DECIDIM_VERSION = "0.32.2"
+    COMPAT_DECIDIM_VERSION = [">= 0.32", "< 0.33"].freeze
+
     def self.version
-      "0.32.1"
+      VERSION
     end
   end
 end

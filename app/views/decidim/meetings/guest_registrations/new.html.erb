@@ -1,0 +1,87 @@
+<% add_decidim_page_title(t("decidim.meetings_guest_registrations.guest_registrations.new.title")) %>
+
+<% if questionnaire_required? %>
+  <%= append_stylesheet_pack_tag "decidim_forms" %>
+  <%= append_javascript_pack_tag "decidim_forms" %>
+<% end %>
+
+<%= render layout: "layouts/decidim/shared/layout_center" do %>
+  <div class="text-center py-10">
+    <h1 class="title-decorator inline-block text-left">
+      <%= t("decidim.meetings_guest_registrations.guest_registrations.new.title") %>
+    </h1>
+    <p class="mt-4 text-left">
+      <%= link_to present(meeting).title(html_escape: true), Decidim::ResourceLocatorPresenter.new(meeting).path %>
+    </p>
+  </div>
+
+  <% unless meeting.has_available_slots? %>
+    <%= cell("decidim/announcement", t("decidim.meetings_guest_registrations.guest_registrations.new.waitlist_notice"), callout_class: "warning") %>
+  <% end %>
+
+  <%= decidim_form_for(@form, url: meeting_guest_registration_path(meeting_id: meeting.id), method: :post, html: { class: "form guest-registration-form response-questionnaire", multipart: questionnaire_required? }) do |form| %>
+    <%= form_required_explanation %>
+    <%= invisible_captcha %>
+
+    <div class="form__wrapper">
+      <p class="help-text"><%= t("decidim.meetings_guest_registrations.guest_registrations.new.intro") %></p>
+
+      <%= form.text_field :name, autocomplete: "name", required: true %>
+      <%= form.email_field :email, autocomplete: "email", required: true %>
+      <%= form.text_field :phone, type: "tel", autocomplete: "tel", required: true, help_text: t("decidim.meetings_guest_registrations.guest_registrations.new.phone_help") %>
+    </div>
+
+    <% if questionnaire_required? %>
+      <div class="form__wrapper">
+        <% if questionnaire.title.present? && translated_attribute(questionnaire.title).present? %>
+          <h2 class="h4"><%= translated_attribute questionnaire.title %></h2>
+        <% end %>
+        <% if translated_attribute(questionnaire.description).present? %>
+          <div class="editor-content">
+            <%= decidim_sanitize_editor_admin translated_attribute(questionnaire.description) %>
+          </div>
+        <% end %>
+
+        <% @form.responses.each_with_index do |response, response_idx| %>
+          <div class="response question" data-max-choices="<%= response.question.max_choices %>" data-conditioned="<%= response.question.display_conditions.any? %>" data-question-id="<%= response.question.id %>">
+            <% response.question.display_conditions.each do |display_condition| %>
+              <%= content_tag :div, nil, class: "display-condition", data: display_condition.to_html_data %>
+            <% end %>
+
+            <%= fields_for "guest_registration[responses][#{response_idx}]", response do |response_form| %>
+              <%= render "decidim/forms/questionnaires/response", response_form:, response:, response_idx:, disabled: false %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+
+    <div class="form__wrapper">
+      <div class="guest-registration-form__privacy">
+        <div class="editor-content">
+          <%= decidim_sanitize_editor_admin translated_attribute(meeting.guest_registrations_privacy_text) %>
+        </div>
+        <%= form.check_box :privacy_agreement, label: t("decidim.meetings_guest_registrations.guest_registrations.new.privacy_agreement"), required: true %>
+      </div>
+
+      <div class="guest-registration-form__terms">
+        <div class="editor-content">
+          <%= decidim_sanitize_editor translated_attribute(meeting.registration_terms) %>
+        </div>
+        <%= form.check_box :tos_agreement, label: t("decidim.meetings_guest_registrations.guest_registrations.new.tos_agreement"), required: true %>
+      </div>
+    </div>
+
+    <div class="form__wrapper-block flex-col-reverse md:flex-row justify-between">
+      <%= link_to Decidim::ResourceLocatorPresenter.new(meeting).path, class: "button button__sm md:button__lg button__text-secondary" do %>
+        <%= icon "arrow-left-line" %>
+        <span><%= t("decidim.meetings_guest_registrations.guest_registrations.new.back") %></span>
+      <% end %>
+
+      <button type="submit" class="button button__sm md:button__lg button__secondary">
+        <span><%= meeting.has_available_slots? ? t("decidim.meetings_guest_registrations.guest_registrations.new.submit") : t("decidim.meetings_guest_registrations.guest_registrations.new.submit_waitlist") %></span>
+        <%= icon "arrow-right-line" %>
+      </button>
+    </div>
+  <% end %>
+<% end %>

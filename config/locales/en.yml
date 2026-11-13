@@ -1,6 +1,129 @@
 ---
 en:
+  activemodel:
+    attributes:
+      guest_registration:
+        email: Email
+        name: Name and surname
+        phone: Phone
+        privacy_agreement: I have read and accept the data protection information
+        tos_agreement: I accept the registration terms
+      meeting:
+        guest_registrations_enabled: Allow registrations without an account
+        guest_registrations_privacy_text: Data protection information for registrations
+          without an account
+    errors:
+      models:
+        guest_registration:
+          attributes:
+            email:
+              taken: is already registered to this meeting
+        meeting:
+          attributes:
+            guest_registrations_enabled:
+              verification_required: cannot be enabled because joining this meeting
+                requires a verification
+  activerecord:
+    errors:
+      models:
+        decidim/meetings/registration:
+          attributes:
+            base:
+              user_or_guest_required: A registration must belong to a user or to a
+                guest, but not to both
   decidim:
-    components:
-      meetings_guest_registrations:
-        name: MeetingsGuestRegistrations
+    meetings_guest_registrations:
+      admin:
+        registrations:
+          form:
+            guest_registrations_enabled_help: People without an account can register
+              by giving their name, email and phone. It cannot be enabled if joining
+              the meeting requires a verification.
+            guest_registrations_inactive: 'Registrations without an account are enabled,
+              but they are not working: joining this meeting now requires a verification.
+              Remove the verification or disable the option.'
+            guest_registrations_privacy_text_help: Mandatory when registrations without
+              an account are allowed. It is shown in the registration form for people
+              without an account.
+        registrations_attendees:
+          phone: Phone
+          registration_type: Type
+      guest_registrations:
+        cancel:
+          confirm: Cancel my registration
+          invalid_token: This cancellation link is not valid or the registration has
+            already been cancelled.
+          keep: Keep my registration
+          question_html: Do you want to cancel your registration for the meeting <strong>%{title}</strong>?
+          release_slot: Your place will be released for other people.
+          title: Cancel registration
+        create:
+          invalid: You cannot register to this meeting right now.
+          invalid_form: There was a problem with your registration. Please check the
+            form.
+          success: Your registration has been confirmed. We have sent you an email
+            with the details.
+          waitlist_success: You have been added to the waiting list. We have sent
+            you an email.
+        destroy:
+          invalid: Your registration could not be cancelled.
+          success: Your registration has been cancelled.
+        new:
+          back: Back to the meeting
+          intro: You can register without an account. We will use these details to
+            manage your registration and to contact you about this meeting.
+          phone_help: The organizers will only use it to contact you about this meeting.
+          privacy_agreement: I have read and accept the data protection information
+          submit: Register
+          submit_waitlist: Join the waiting list
+          title: Register to the meeting
+          tos_agreement: I accept the registration terms
+          waitlist_notice: There are no places left. If you register you will join
+            the waiting list and we will email you if a place becomes available.
+        not_allowed:
+          cancel: This registration can no longer be cancelled.
+          create: Registrations without an account are not available for this meeting.
+          destroy: This registration can no longer be cancelled.
+          new: Registrations without an account are not available for this meeting.
+      mailer:
+        calendar_attached: The meeting details are attached as a calendar file.
+        cancel_link_html: If you cannot attend, you can <a href="%{url}">cancel your
+          registration</a>.
+        confirmation:
+          body_html: Your registration for the meeting <a href="%{url}">%{title}</a>
+            has been confirmed.
+          subject: 'Registration confirmed: %{meeting_title}'
+        greeting: Hello %{name},
+        meeting_cancelled:
+          body_html: The meeting <a href="%{url}">%{title}</a> you had registered
+            for has been cancelled.
+          subject: 'Meeting cancelled: %{meeting_title}'
+        meeting_updated:
+          body_html: The date, time or place of the meeting <a href="%{url}">%{title}</a>
+            has changed. These are the new details.
+          subject: 'Meeting updated: %{meeting_title}'
+        online_meeting_html: 'Join the meeting online: <a href="%{url}">%{url}</a>'
+        promoted:
+          body_html: A place has become available and your registration for the meeting
+            <a href="%{url}">%{title}</a> is now confirmed.
+          subject: 'You have a place: %{meeting_title}'
+        registration_cancelled:
+          body_html: Your registration for the meeting <a href="%{url}">%{title}</a>
+            has been cancelled.
+          subject: 'Registration cancelled: %{meeting_title}'
+        registration_code: Your registration code is %{code}. Please show the following
+          QR code to the organizers to validate your attendance.
+        reminder:
+          body_html: This is a reminder that the meeting <a href="%{url}">%{title}</a>
+            is coming soon.
+          subject: 'Reminder: %{meeting_title}'
+        waitlist:
+          body_html: There are no places left for the meeting <a href="%{url}">%{title}</a>,
+            so you have been added to the waiting list. We will email you if a place
+            becomes available.
+          subject: 'Waiting list: %{meeting_title}'
+        when: 'When:'
+        where: 'Where:'
+      registration_type:
+        guest: Without account
+        user: With account
