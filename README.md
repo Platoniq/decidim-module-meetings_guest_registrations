@@ -1,6 +1,6 @@
 # Decidim::MeetingsGuestRegistrations
 
-[![Coverage Status](https://coveralls.io/repos/github/AjuntamentdeBarcelona/decidim-module-meetings_guest_registrations/badge.svg?branch=main)](https://coveralls.io/github/AjuntamentdeBarcelona/decidim-module-meetings_guest_registrations?branch=main)
+[![Coverage Status](https://coveralls.io/repos/github/Platoniq/decidim-module-meetings_guest_registrations/badge.svg?branch=main)](https://coveralls.io/github/Platoniq/decidim-module-meetings_guest_registrations?branch=main)
 
 Registrations to Decidim meetings for people without an account.
 
@@ -39,7 +39,7 @@ The list of registrations shows the phone and the type (with or without account)
 Add the gem to the application's Gemfile:
 
 ```ruby
-gem "decidim-meetings_guest_registrations", git: "https://github.com/AjuntamentdeBarcelona/decidim-module-meetings_guest_registrations"
+gem "decidim-meetings_guest_registrations", git: "https://github.com/Platoniq/decidim-module-meetings_guest_registrations"
 ```
 
 Install and run the migrations:

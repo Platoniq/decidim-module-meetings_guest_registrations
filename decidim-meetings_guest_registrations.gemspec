@@ -9,10 +9,10 @@ Gem::Specification.new do |s|
   s.authors = ["Fran Bolívar"]
   s.email = ["francisco.bolivar@nazaries.com"]
   s.license = "AGPL-3.0-or-later"
-  s.homepage = "https://github.com/AjuntamentdeBarcelona/decidim-module-meetings_guest_registrations"
+  s.homepage = "https://github.com/Platoniq/decidim-module-meetings_guest_registrations"
   s.metadata = {
-    "bug_tracker_uri" => "https://github.com/AjuntamentdeBarcelona/decidim-module-meetings_guest_registrations/issues",
-    "source_code_uri" => "https://github.com/AjuntamentdeBarcelona/decidim-module-meetings_guest_registrations",
+    "bug_tracker_uri" => "https://github.com/Platoniq/decidim-module-meetings_guest_registrations/issues",
+    "source_code_uri" => "https://github.com/Platoniq/decidim-module-meetings_guest_registrations",
     "rubygems_mfa_required" => "true"
   }
   s.required_ruby_version = "~> 3.4"
