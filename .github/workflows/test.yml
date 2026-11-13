@@ -66,12 +66,11 @@ jobs:
         name: RSpec
         env:
           SIMPLECOV: "true"
-      # Uses the GITHUB_TOKEN: no Coveralls key is needed once the repository
-      # is enabled in coveralls.io. Until then, a failed upload does not fail
-      # the build.
+      # A failed upload does not fail the build.
       - uses: coverallsapp/github-action@v2
         name: Upload coverage to Coveralls
         with:
+          github-token: ${{ secrets.COVERALLS_REPO_TOKEN }}
           file: coverage/coverage.xml
           format: cobertura
           fail-on-error: false
