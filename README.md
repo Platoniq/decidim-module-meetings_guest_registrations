@@ -1,5 +1,7 @@
 # Decidim::MeetingsGuestRegistrations
 
+[![[CI] Lint](https://github.com/Platoniq/decidim-module-meetings_guest_registrations/actions/workflows/lint.yml/badge.svg)](https://github.com/Platoniq/decidim-module-meetings_guest_registrations/actions/workflows/lint.yml)
+[![[CI] Test](https://github.com/Platoniq/decidim-module-meetings_guest_registrations/actions/workflows/test.yml/badge.svg)](https://github.com/Platoniq/decidim-module-meetings_guest_registrations/actions/workflows/test.yml)
 [![Coverage Status](https://coveralls.io/repos/github/Platoniq/decidim-module-meetings_guest_registrations/badge.svg?branch=main)](https://coveralls.io/github/Platoniq/decidim-module-meetings_guest_registrations?branch=main)
 
 Registrations to Decidim meetings for people without an account.
