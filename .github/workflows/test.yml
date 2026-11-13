@@ -7,6 +7,8 @@ on:
 
 env:
   CI: "true"
+  # Spring refuses to boot the test app, which disables reloading under CI.
+  DISABLE_SPRING: "1"
   RUBY_VERSION: 3.4.7
   NODE_VERSION: 22.14.0
 
