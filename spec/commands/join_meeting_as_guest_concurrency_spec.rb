@@ -45,6 +45,7 @@ module Decidim::MeetingsGuestRegistrations
       threads.each(&:join)
 
       expect(meeting.registrations.count).to eq(1)
+      expect(ActiveJob::Base.queue_adapter.enqueued_jobs.count { |job| job["arguments"]&.include?("already_registered") }).to eq(3)
     end
   end
 end

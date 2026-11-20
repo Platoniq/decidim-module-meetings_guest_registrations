@@ -38,8 +38,17 @@ module Decidim::MeetingsGuestRegistrations
       )
     end
 
+    shared_examples "an email already registered" do |registrations: 1|
+      it "answers as a new registration and tells the owner of the address" do
+        expect { subject.call }.to broadcast(:ok, :registered)
+          .and have_enqueued_mail(GuestRegistrationMailer, :already_registered)
+        expect(meeting.registrations.count).to eq(registrations)
+        expect(form.errors).to be_empty
+      end
+    end
+
     it "creates a registered guest registration" do
-      expect { subject.call }.to broadcast(:ok)
+      expect { subject.call }.to broadcast(:ok, :registered)
 
       registration = meeting.registrations.last
       expect(registration).to be_guest
@@ -71,10 +80,33 @@ module Decidim::MeetingsGuestRegistrations
     context "when the email is already registered" do
       before { create(:guest_registration, meeting:, email: "ANA@example.org") }
 
-      it "is invalid" do
-        expect { subject.call }.to broadcast(:invalid_form)
-        expect(form.errors[:email]).to be_present
+      it_behaves_like "an email already registered"
+
+      it "sends the e-mail to that address, in the locale of the request" do
+        perform_enqueued_jobs { I18n.with_locale(:es) { subject.call } }
+
+        mail = ActionMailer::Base.deliveries.last
+        expect(mail.to).to eq(["ana@example.org"])
+        expect(mail.subject).to include("Ya estabas inscrito")
       end
+
+      context "and there are no slots left" do
+        before do
+          allow(Decidim::Meetings).to receive(:waiting_list_enabled).and_return(true)
+          meeting.update!(available_slots: 1)
+        end
+
+        it "answers as the waiting list" do
+          expect { subject.call }.to broadcast(:ok, :waiting_list)
+          expect(meeting.registrations.count).to eq(1)
+        end
+      end
+    end
+
+    context "when a user with that email is registered" do
+      before { create(:registration, meeting:, user: create(:user, :confirmed, organization:, email:)) }
+
+      it_behaves_like "an email already registered"
     end
 
     context "when the email belongs to a user account" do
@@ -91,11 +123,7 @@ module Decidim::MeetingsGuestRegistrations
         create(:registration, meeting:, user: create(:user, :confirmed, organization:, email:))
       end
 
-      it "is invalid with the email taken" do
-        expect { subject.call }.to broadcast(:invalid_form)
-        expect(form.errors.details[:email]).to include(error: :taken)
-        expect(meeting.registrations.count).to eq(1)
-      end
+      it_behaves_like "an email already registered"
     end
 
     context "when the form is not valid" do
@@ -126,7 +154,7 @@ module Decidim::MeetingsGuestRegistrations
 
         it "adds the guest to the waiting list" do
           perform_enqueued_jobs do
-            expect { subject.call }.to broadcast(:ok)
+            expect { subject.call }.to broadcast(:ok, :waiting_list)
           end
 
           expect(meeting.registrations.last).to be_waiting_list
@@ -180,21 +208,6 @@ module Decidim::MeetingsGuestRegistrations
       end
     end
 
-    # The form rejects a registered email, but another request can register it
-    # between that validation and the lock.
-    context "when the same email is registered after validating the form" do
-      before do
-        allow(form).to receive(:invalid?).and_return(false)
-        create(:guest_registration, meeting:, email:)
-      end
-
-      it "is invalid with the email taken" do
-        expect { subject.call }.to broadcast(:invalid_form)
-        expect(form.errors.details[:email]).to include(error: :taken)
-        expect(meeting.registrations.count).to eq(1)
-      end
-    end
-
     # Two requests that pass every check at the same time: the unique index on
     # the email digest stops the second one.
     context "when the unique index rejects the registration" do
@@ -206,11 +219,7 @@ module Decidim::MeetingsGuestRegistrations
         end
       end
 
-      it "is invalid with the email taken" do
-        expect { subject.call }.to broadcast(:invalid_form)
-        expect(form.errors.details[:email]).to include(error: :taken)
-        expect(meeting.registrations.count).to eq(0)
-      end
+      it_behaves_like "an email already registered", registrations: 0
     end
   end
 end

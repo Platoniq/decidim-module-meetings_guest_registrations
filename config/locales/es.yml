@@ -14,10 +14,6 @@ es:
           las inscripciones sin cuenta
     errors:
       models:
-        guest_registration:
-          attributes:
-            email:
-              taken: ya está inscrito en este encuentro
         meeting:
           attributes:
             guest_registrations_enabled:
@@ -87,6 +83,11 @@ es:
           destroy: Esta inscripción ya no se puede cancelar.
           new: Las inscripciones sin cuenta no están disponibles en este encuentro.
       mailer:
+        already_registered:
+          body_html: Alguien ha intentado inscribir esta dirección de correo en el
+            encuentro <a href="%{url}">%{title}</a>, pero ya estabas inscrito. No
+            tienes que hacer nada. Si no has sido tú, puedes ignorar este correo.
+          subject: 'Ya estabas inscrito: %{meeting_title}'
         calendar_attached: Los datos del encuentro van adjuntos en un archivo de calendario.
         cancel_link_html: Si no puedes asistir, puedes <a href="%{url}">cancelar tu
           inscripción</a>.
@@ -95,6 +96,7 @@ es:
             se ha confirmado.
           subject: 'Inscripción confirmada: %{meeting_title}'
         greeting: 'Hola, %{name}:'
+        greeting_without_name: 'Hola:'
         meeting_cancelled:
           body_html: Se ha cancelado el encuentro <a href="%{url}">%{title}</a> en
             el que te habías inscrito.

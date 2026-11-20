@@ -14,10 +14,6 @@ ca:
           a les inscripcions sense compte
     errors:
       models:
-        guest_registration:
-          attributes:
-            email:
-              taken: ja està inscrit en aquesta trobada
         meeting:
           attributes:
             guest_registrations_enabled:
@@ -88,6 +84,11 @@ ca:
           destroy: Aquesta inscripció ja no es pot cancel·lar.
           new: Les inscripcions sense compte no estan disponibles en aquesta trobada.
       mailer:
+        already_registered:
+          body_html: Algú ha intentat inscriure aquesta adreça de correu a la trobada
+            <a href="%{url}">%{title}</a>, però ja hi estaves inscrit. No cal que
+            facis res. Si no has estat tu, pots ignorar aquest correu.
+          subject: 'Ja hi estaves inscrit: %{meeting_title}'
         calendar_attached: Les dades de la trobada van adjuntes en un fitxer de calendari.
         cancel_link_html: Si no hi pots assistir, pots <a href="%{url}">cancel·lar
           la teva inscripció</a>.
@@ -96,6 +97,7 @@ ca:
             s'ha confirmat.
           subject: 'Inscripció confirmada: %{meeting_title}'
         greeting: 'Hola, %{name}:'
+        greeting_without_name: 'Hola:'
         meeting_cancelled:
           body_html: S'ha cancel·lat la trobada <a href="%{url}">%{title}</a> a la
             qual t'havies inscrit.

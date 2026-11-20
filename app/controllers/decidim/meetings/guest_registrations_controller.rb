@@ -37,8 +37,8 @@ module Decidim
         Decidim::MeetingsGuestRegistrations::JoinMeetingAsGuest.call(meeting, @form) do
           # i18n-tasks-use t("decidim.meetings_guest_registrations.guest_registrations.create.success")
           # i18n-tasks-use t("decidim.meetings_guest_registrations.guest_registrations.create.waitlist_success")
-          on(:ok) do |registration|
-            flash[:notice] = I18n.t(registration.registered? ? "success" : "waitlist_success", scope: "decidim.meetings_guest_registrations.guest_registrations.create")
+          on(:ok) do |status|
+            flash[:notice] = I18n.t(status == :registered ? "success" : "waitlist_success", scope: "decidim.meetings_guest_registrations.guest_registrations.create")
             redirect_to meeting_path
           end
 

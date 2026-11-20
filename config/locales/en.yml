@@ -14,10 +14,6 @@ en:
           without an account
     errors:
       models:
-        guest_registration:
-          attributes:
-            email:
-              taken: is already registered to this meeting
         meeting:
           attributes:
             guest_registrations_enabled:
@@ -86,6 +82,11 @@ en:
           destroy: This registration can no longer be cancelled.
           new: Registrations without an account are not available for this meeting.
       mailer:
+        already_registered:
+          body_html: Someone has tried to register this email address to the meeting
+            <a href="%{url}">%{title}</a>, but you were already registered. You do
+            not need to do anything. If it was not you, you can ignore this email.
+          subject: 'You were already registered: %{meeting_title}'
         calendar_attached: The meeting details are attached as a calendar file.
         cancel_link_html: If you cannot attend, you can <a href="%{url}">cancel your
           registration</a>.
@@ -94,6 +95,7 @@ en:
             has been confirmed.
           subject: 'Registration confirmed: %{meeting_title}'
         greeting: Hello %{name},
+        greeting_without_name: Hello,
         meeting_cancelled:
           body_html: The meeting <a href="%{url}">%{title}</a> you had registered
             for has been cancelled.
