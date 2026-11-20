@@ -63,6 +63,13 @@ module Decidim
         with_recipient(meeting_id, recipient) { deliver(:registration_cancelled) }
       end
 
+      # Someone tried to register an email already registered to the meeting.
+      # The name typed in the form is not used: it may not belong to the owner
+      # of the address.
+      def already_registered(meeting_id, recipient)
+        with_recipient(meeting_id, recipient) { deliver(:already_registered) }
+      end
+
       private
 
       # E-mails about an existing registration are only sent while the meeting

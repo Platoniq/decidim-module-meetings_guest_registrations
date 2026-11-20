@@ -121,6 +121,19 @@ module Decidim::MeetingsGuestRegistrations
       it { expect(mail.subject).to include("Inscripció cancel·lada") }
     end
 
+    describe "#already_registered" do
+      let(:recipient) { Recipient.encode_data(name: nil, email: "ana@example.org", locale: "es") }
+      let(:mail) { described_class.already_registered(meeting.id, recipient) }
+
+      it "tells the owner of the address, without a name nor a cancellation link" do
+        expect(mail.to).to eq(["ana@example.org"])
+        expect(mail.subject).to include("Ya estabas inscrito")
+        expect(mail.body.decoded).to include("Hola:")
+        expect(mail.body.decoded).not_to include("guest_registration/cancel")
+        expect(mail.attachments).to be_empty
+      end
+    end
+
     context "with a tampered recipient" do
       it "does not send anything" do
         expect(described_class.registration_cancelled(meeting.id, "tampered").message).to be_a(ActionMailer::Base::NullMail)

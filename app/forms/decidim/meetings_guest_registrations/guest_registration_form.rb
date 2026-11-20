@@ -19,7 +19,6 @@ module Decidim
       validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }, length: { maximum: 254 }
       validates :phone, presence: true, format: { with: GuestRegistration::PHONE_FORMAT }
       validates :privacy_agreement, allow_nil: false, acceptance: true
-      validate :email_not_registered
 
       # Guests never appear in the public list of attendees.
       def public_participation
@@ -38,19 +37,6 @@ module Decidim
 
       def phone
         super&.strip
-      end
-
-      private
-
-      def meeting
-        context[:meeting]
-      end
-
-      def email_not_registered
-        return if meeting.blank? || email.blank?
-        return unless GuestRegistration.registered_with_email?(meeting, email)
-
-        errors.add(:email, :taken)
       end
     end
   end

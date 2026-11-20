@@ -9,8 +9,10 @@ module Decidim
     # parts that need a user: follows, gamification and notifications.
     class JoinMeetingAsGuest < Decidim::Command
       # Broadcasts:
-      #   :ok, registration  - registered or added to the waiting list
-      #   :invalid_form      - form errors (including an email already registered)
+      #   :ok, status        - :registered or :waiting_list. An email already
+      #                        registered gets the same answer and an e-mail,
+      #                        so the form does not reveal who is registered.
+      #   :invalid_form      - form errors
       #   :invalid           - the meeting does not accept guests or has no room
       def initialize(meeting, form)
         @meeting = meeting
@@ -22,12 +24,13 @@ module Decidim
         return broadcast(:invalid_form) if form.invalid?
 
         result = register
+        return already_registered if result == :already_registered
         return broadcast(result) unless result == :ok
 
         send_email
         notify_admins_over_percentage if registration.registered?
 
-        broadcast(:ok, registration)
+        broadcast(:ok, registration.status.to_sym)
       end
 
       private
@@ -41,12 +44,8 @@ module Decidim
           if !meeting.guest_can_take_a_place?
             result = :invalid
           elsif GuestRegistration.registered_with_email?(meeting, form.email)
-            form.errors.add(:email, :taken)
-            result = :invalid_form
+            result = :already_registered
           elsif response_questionnaire == :invalid
-            # Responses go first: ResponseQuestionnaire validates the form
-            # again, and the email check would fail once the registration
-            # exists. Both run in the same transaction.
             result = :invalid_form
           else
             create_registration!
@@ -55,8 +54,17 @@ module Decidim
 
         result
       rescue ActiveRecord::RecordNotUnique
-        form.errors.add(:email, :taken)
-        :invalid_form
+        :already_registered
+      end
+
+      # Same answer a new registration would get right now. Only the owner of
+      # the address learns, by e-mail, that it was already registered.
+      def already_registered
+        recipient = Recipient.encode_data(name: nil, email: form.email, locale: I18n.locale.to_s)
+        mail = GuestRegistrationMailer.already_registered(meeting.id, recipient)
+        MeetingsGuestRegistrations.after_commit { mail.deliver_later }
+
+        broadcast(:ok, meeting.has_available_slots? ? :registered : :waiting_list)
       end
 
       def create_registration!

@@ -80,14 +80,19 @@ describe "Guest registration" do
     expect(meeting.registrations.count).to eq(0)
   end
 
-  it "does not allow the same email twice" do
+  it "does not register the same email twice, nor reveal it" do
     create(:guest_registration, meeting:, email: "ana@example.org")
 
     visit Decidim::EngineRouter.main_proxy(component).new_meeting_guest_registration_path(meeting_id: meeting.id)
     fill_in_guest_form
-    click_on "Register"
+    perform_enqueued_jobs do
+      click_on "Register"
+      expect(page).to have_content("Your registration has been confirmed")
+    end
 
-    expect(page).to have_content("is already registered to this meeting")
+    expect(meeting.registrations.count).to eq(1)
+    expect(last_email.to).to eq(["ana@example.org"])
+    expect(last_email.subject).to include("You were already registered")
   end
 
   it "does not cancel once the meeting has started" do
