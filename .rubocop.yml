@@ -1,2 +1,15 @@
 inherit_gem:
   decidim-dev: rubocop-decidim.yml
+
+inherit_mode:
+  merge:
+    - Exclude
+
+AllCops:
+  Exclude:
+    - "spec/decidim_dummy_app/**/*"
+    - "development_app/**/*"
+    - "bin/**/*"
+    - "node_modules/**/*"
+    - "vendor/**/*"
+    - "tmp/**/*"

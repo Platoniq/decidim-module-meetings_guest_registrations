@@ -1,10 +1,29 @@
 ---
 
 base_locale: en
-locales: [en]
+locales: [en, ca, es]
+
+data:
+  read:
+    - config/locales/%{locale}.yml
+  write:
+    - config/locales/%{locale}.yml
+
+search:
+  paths:
+    - app
+  strict: false
+
+# The overridden core views use core keys, which live in decidim-meetings.
+ignore_missing:
+  - decidim.meetings.*
+  - decidim.admin.*
+  - decidim.forms.*
+  - decidim.*.admin.exports.registrations
 
 ignore_unused:
-  - "decidim.components.meetings_guest_registrations.name"
-
-ignore_missing:
-  - decidim.participatory_processes.scopes.global
+  - activemodel.attributes.*
+  - activemodel.errors.*
+  - activerecord.errors.*
+  - decidim.meetings_guest_registrations.mailer.*
+  - decidim.meetings_guest_registrations.registration_type.*

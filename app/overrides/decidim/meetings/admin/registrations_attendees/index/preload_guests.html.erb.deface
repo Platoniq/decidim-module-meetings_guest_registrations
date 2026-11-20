@@ -1,0 +1,2 @@
+<!-- replace "erb[silent]:contains('registrations.each do |registration|')" -->
+<% registrations.includes(:user, :guest_registration).each do |registration| %>

@@ -1,14 +1,29 @@
 # frozen_string_literal: true
 
-require "decidim/components/namer"
 require "decidim/core/test/factories"
+require "decidim/meetings/test/factories"
 
 FactoryBot.define do
-  factory :meetings_guest_registrations_component, parent: :component do
-    name { Decidim::Components::Namer.new(participatory_space.organization.available_locales, :meetings_guest_registrations).i18n_name }
-    manifest_name :meetings_guest_registrations
-    participatory_space { create(:participatory_process, :with_steps) }
-  end
+  factory :guest_registration, class: "Decidim::MeetingsGuestRegistrations::GuestRegistration" do
+    transient do
+      meeting { create(:meeting, :published, :with_registrations_enabled) }
+      status { :registered }
+    end
 
-  # Add engine factories here
+    name { Faker::Name.name }
+    email { Faker::Internet.email }
+    phone { "+34 600 123 456" }
+    locale { "en" }
+    session_token { SecureRandom.hex(16) }
+
+    registration do
+      build(:registration, meeting:, user: nil, status:, public_participation: false)
+    end
+
+    after(:build) do |guest, evaluator|
+      guest.meeting = evaluator.meeting
+      guest.registration.meeting = evaluator.meeting
+      guest.registration.guest_registration = guest
+    end
+  end
 end

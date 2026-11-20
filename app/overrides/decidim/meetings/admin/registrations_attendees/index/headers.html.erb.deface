@@ -1,0 +1,3 @@
+<!-- insert_after "#meeting-invites thead th:nth-child(2)" -->
+<th><%= t("decidim.meetings_guest_registrations.admin.registrations_attendees.phone") %></th>
+<th><%= t("decidim.meetings_guest_registrations.admin.registrations_attendees.registration_type") %></th>

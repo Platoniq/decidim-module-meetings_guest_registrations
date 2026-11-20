@@ -1,0 +1,7 @@
+<!-- insert_after "#meeting-invites tbody td:nth-child(2)" -->
+<td data-label="<%= t("decidim.meetings_guest_registrations.admin.registrations_attendees.phone") %>">
+  <%= presenter.phone %>
+</td>
+<td data-label="<%= t("decidim.meetings_guest_registrations.admin.registrations_attendees.registration_type") %>">
+  <%= presenter.registration_type %>
+</td>

@@ -1,0 +1,5 @@
+<p class="email-greeting"><%= t("decidim.meetings_guest_registrations.mailer.greeting", name: @name) %></p>
+
+<p class="email-instructions"><%= t("decidim.meetings_guest_registrations.mailer.#{@kind}.body_html", title: present(@meeting).title(html_escape: true), url: @locator.url) %></p>
+
+<%= render "decidim/meetings_guest_registrations/guest_registration_mailer/cancel_link" %>
